@@ -19,8 +19,8 @@ type Table = {
   setAtualizacao: Dispatch<SetStateAction<any>>;
   setModalAberto: Dispatch<SetStateAction<boolean>>;
   setTipoOperacao: Dispatch<SetStateAction<string>>;
-  transacoes: Array<categoriesFilter>;
-  transacaoAtual: undefined;
+  transacoes: any;
+  transacaoAtual: any;
   atualizacao: number;
   tipoOperacao: string;
   filtroAparecendo: boolean;
