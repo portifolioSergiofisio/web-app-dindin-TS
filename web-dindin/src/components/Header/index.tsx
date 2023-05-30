@@ -5,13 +5,13 @@ import Logout from "../../assets/logout.svg";
 import profileImg from "../../assets/profile-picture.svg";
 import axios from "../../services/api";
 import ModalUsuario from "../ModalUsuario";
-import "./styles.css";
+import "./styles.scss";
 
-type header={
-  logado:Boolean
-}
+type header = {
+  logado: Boolean;
+};
 
-export default function Header({ logado }:header) {
+export default function Header({ logado }: header) {
   const [nomeUsuario, setNomeUsuario] = useState();
   const [modalUsuario, setModalUsuario] = useState(false);
   const navigate = useNavigate();

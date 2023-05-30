@@ -1,7 +1,7 @@
 @import "../../styles.scss";
 
 .container-home {
-  background-color: #fff;
+  background-color: #787878ce;
   border-radius: 60px 60px 0px 0px;
   width: 100%;
   height: calc(100vh - 116px);
@@ -47,8 +47,9 @@
     }
   }
   .tabela-resumo {
-    @include display_flex(row, flex-start, flex-start);
+    @include display_flex(row, space-between, flex-start);
     gap: 34px;
+    max-height: 80%;
   }
 }
 
@@ -56,10 +57,10 @@
   overflow: hidden;
   transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
   height: auto;
-  max-height: 9999px;
+  max-height: 500px;
 }
 
-.wrap-filtro.collapsed {
+.collapsed {
   max-height: 0;
   transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
 }

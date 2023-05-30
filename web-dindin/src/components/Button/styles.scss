@@ -4,20 +4,20 @@ button {
   all: unset;
   cursor: pointer;
   background-color: $azul_roxo;
-  border-radius: 5px;
+  border-radius: 8px;
   color: #ffff;
   font-family: "Rubik", sans-serif;
+  font-size: 1.5em;
   font-weight: 700;
   text-align: center;
-  transition: background-color 0.2s ease-out;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
     background-color: $azul_escuro;
     opacity: 0.8;
-    transition: background-color 0.4s ease-in;
   }
 
   &:active {
-    animation: bounce 0.1s ease-in;
+    background-color: $azul_escuro;
   }
 }

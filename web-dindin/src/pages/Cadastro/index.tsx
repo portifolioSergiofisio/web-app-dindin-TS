@@ -16,7 +16,7 @@ export default function Cadastro() {
   const [senha, setSenha] = useState("");
   const [confirmaSenha, setConfirmaSenha] = useState("");
 
-  const handleSubmit = async (e:FormEvent ) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await axios.post("/usuario", {
@@ -33,7 +33,7 @@ export default function Cadastro() {
       setTimeout(() => {
         navigate("/");
       }, 1500);
-    } catch (err:any) {
+    } catch (err: any) {
       toast.error(err.response.data.mensagem, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -43,7 +43,7 @@ export default function Cadastro() {
   return (
     <div className="container-login cadastro">
       <ToastContainer />
-      <div className="container-r">
+      <div className="container-cadastro">
         <h2>Cadastre-se</h2>
         <form onSubmit={handleSubmit}>
           <Input label="Nome" type="text" value={nome} set={setNome} />

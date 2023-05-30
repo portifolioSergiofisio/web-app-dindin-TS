@@ -13,14 +13,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const handleSubmit = async (e:FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const { data } = await axios.post("/login", {
         email,
         senha,
       });
-      
+
       localStorage.setItem("token", data.token);
       setEmail("");
       setSenha("");
@@ -30,7 +30,7 @@ export default function Login() {
       setTimeout(() => {
         navigate("/home");
       }, 1500);
-    } catch (err:any) {
+    } catch (err: any) {
       toast.error(err.response.data.mensagem, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -44,7 +44,7 @@ export default function Login() {
   return (
     <div className="container-login">
       <ToastContainer />
-      <div className="container-l">
+      <div className="container-left">
         <h1>
           Controle suas <strong>finanças</strong>, sem planilha chata.
         </h1>
@@ -54,7 +54,7 @@ export default function Login() {
         </p>
         <Button text="Cadastre-se" onClick={handleCadastrado} />
       </div>
-      <div className="container-r">
+      <div className="container-right">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <Input label="Email" type="email" value={email} set={setEmail} />
