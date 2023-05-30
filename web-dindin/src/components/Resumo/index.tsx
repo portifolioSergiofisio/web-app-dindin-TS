@@ -8,7 +8,7 @@ type Props = {
   atualizacao: string|number;
   setModalAberto: Dispatch<SetStateAction<boolean>>;
   setTipoOperacao: Dispatch<SetStateAction<any>>;
-  categoriasAtivas: any;
+  categoriasAtivas: Array<any>;
 };
 
 export default function Resumo({
@@ -17,6 +17,7 @@ export default function Resumo({
   setTipoOperacao,
   categoriasAtivas
 }:Props) {
+  
   const [entrada, setEntrada] = useState<number>(0);
   const [saida, setSaida] = useState<number>(0);
 
@@ -25,6 +26,7 @@ export default function Resumo({
       
       let parametros:any = "";
       parametros = categoriasAtivas.map((cat:string, index:number) => {
+        
         if (index < categoriasAtivas.length - 1) {
           return parametros.concat(`filtro[]=${cat}&`);
         } else {

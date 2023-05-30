@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { handleConfirm } from "../../function/function";
 import axios from "../../services/api";
 import "./styles.scss";
 
@@ -36,16 +37,6 @@ export default function Cadastro() {
       toast.error(err.response.data.mensagem, {
         position: toast.POSITION.TOP_RIGHT,
       });
-    }
-  };
-
-  const handleConfirm = (e:FormEvent, senha:string, confirmaSenha:string) => {
-    e.preventDefault();
-    if (senha !== confirmaSenha) {
-      toast.error("As senhas devem ser iguais!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      return 
     }
   };
 

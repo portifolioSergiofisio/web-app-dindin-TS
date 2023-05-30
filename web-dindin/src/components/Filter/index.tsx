@@ -1,9 +1,20 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "../../services/api";
 import "./styles.scss";
 const token = localStorage.getItem("token");
 
 import Categoria from "../Categoria";
+
+type Filter = {
+  setTransacoes:Dispatch<SetStateAction<any>>,
+  transacoes:any,
+  setAtualizacao:Dispatch<SetStateAction<number>>,
+  atualizacao:number,
+  categoriasAtivas:any,
+  setCategoriasAtivas:Dispatch<SetStateAction<any>>,
+  filtroAplicado:boolean,
+  setFiltroAplicado:Dispatch<SetStateAction<boolean>>,
+}
 
 export default function Filter({
   setTransacoes,
@@ -14,7 +25,8 @@ export default function Filter({
   setCategoriasAtivas,
   filtroAplicado,
   setFiltroAplicado,
-}:any) {
+}:Filter) {
+  
   const [categorias, setCategorias]:any = useState();
 
   async function handleListarCategorias():Promise<void> {
@@ -53,7 +65,7 @@ export default function Filter({
     setFiltroAplicado(true);
     setAtualizacao(atualizacao + 1);
     let transacoesFiltradas = [...transacoes];
-    transacoesFiltradas = transacoesFiltradas.filter((filtro) => {
+    transacoesFiltradas = transacoesFiltradas.filter((filtro:any) => {
       return categoriasAtivas.includes(filtro.categoria_nome);
     });
     setTransacoes(transacoesFiltradas);

@@ -13,8 +13,8 @@ type Table = {
   setModalAberto:Dispatch<SetStateAction<boolean>>
   setTipoOperacao:Dispatch<SetStateAction<string>>
   transacoes:any,
-  transacaoAtual:any
-  atualizacao:any
+  transacaoAtual:Array<object>|null
+  atualizacao:number
   tipoOperacao:string
   filtroAparecendo:boolean
 }
@@ -31,6 +31,7 @@ export default function Table({
   setTipoOperacao,
   filtroAparecendo,
 }:Table) {
+  
   const cabecalhoTabela = [
     "Dia da semana",
     "Descrição",

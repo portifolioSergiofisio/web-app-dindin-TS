@@ -3,7 +3,7 @@ import closeCategoriaModal from "../../assets/close-modal-categoria.svg";
 import "./styles.scss";
 
 type categorias = {
-  descricao:any,
+  descricao:string,
   handleMiniCategorias:()=>void,
   categoriasAtivas:string,
 }
@@ -13,13 +13,13 @@ export default function Categoria({
   handleMiniCategorias,
   categoriasAtivas,
 }:categorias) {
-  
+
   const [categoriaAplicada, setCategoriaAplicada] = useState(false);
 
   const handleClick = () => {
     
     setCategoriaAplicada(!categoriaAplicada);
-    handleMiniCategorias(descricao);
+    handleMiniCategorias();
   };
 
   useEffect(() => {

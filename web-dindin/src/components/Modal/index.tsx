@@ -14,10 +14,10 @@ console.log(token);
 type Modal = {
   id?:string,
   onClose?:()=>void,
-  atualizacao:any,
+  atualizacao:number,
   setAtualizacao: Dispatch<SetStateAction<any>>
   tipoOperacao:string,
-  transacaoAtual:any
+  transacaoAtual:object|null
 }
 
 export default function Modal({
@@ -28,6 +28,7 @@ export default function Modal({
   tipoOperacao,
   transacaoAtual,
 }:Modal) {
+  
   const [categorias, setCategorias] = useState<Array<{ id: number, descricao: string }>>([]);
   const [botaoEntrada, setBotaoEntrada] = useState("azul");
   const [botaoSaida, setBotaoSaida] = useState("cinza");
@@ -180,12 +181,11 @@ export default function Modal({
   useEffect(() => {
     async function getInfoRegister() {
       try {
-        const response = await axios.get(`transacao/${transacaoAtual}`,{
+        const {data:{categoria_nome, data, descricao, tipo, valor}} = await axios.get(`transacao/${transacaoAtual}`,{
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        console.log(response);
         
       } catch (err:any) {
         console.log(err);
