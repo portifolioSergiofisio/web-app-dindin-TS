@@ -5,9 +5,9 @@ import "./styles.scss";
 const token = localStorage.getItem("token");
 
 type Props = {
-  atualizacao: string|number;
+  atualizacao: string | number;
   setModalAberto: Dispatch<SetStateAction<boolean>>;
-  setTipoOperacao: Dispatch<SetStateAction<any>>;
+  setTipoOperacao: Dispatch<SetStateAction<string>>;
   categoriasAtivas: Array<any>;
 };
 
@@ -15,18 +15,15 @@ export default function Resumo({
   atualizacao,
   setModalAberto,
   setTipoOperacao,
-  categoriasAtivas
-}:Props) {
-  
+  categoriasAtivas,
+}: Props) {
   const [entrada, setEntrada] = useState<number>(0);
   const [saida, setSaida] = useState<number>(0);
 
   async function handleResumo() {
     try {
-      
-      let parametros:any = "";
-      parametros = categoriasAtivas.map((cat:string, index:number) => {
-        
+      let parametros: any = "";
+      parametros = categoriasAtivas.map((cat: string, index: number) => {
         if (index < categoriasAtivas.length - 1) {
           return parametros.concat(`filtro[]=${cat}&`);
         } else {
@@ -34,18 +31,20 @@ export default function Resumo({
         }
       });
       parametros = `?${parametros.join("")}`;
-      const { data } = await axios.get(`/transacao/extrato${parametros ? parametros : ""}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axios.get(
+        `/transacao/extrato${parametros ? parametros : ""}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setEntrada(data.entrada);
       setSaida(data.saida);
     } catch (error) {}
   }
 
   const handleModalAberto = () => {
-    
     setModalAberto(true);
     setTipoOperacao("cadastrar");
   };
@@ -88,26 +87,22 @@ export default function Resumo({
           {
             <p
               className={
-                (entrada&&saida) && entrada - saida < 0
+                entrada && saida && entrada - saida < 0
                   ? "valor-saida"
                   : "saldo-positivo"
               }
             >
-              {(entrada&&saida) &&
-                ((entrada - saida) / 100).toLocaleString(
-                  "pt-BR",
-                  {
-                    style: "currency",
-                    currency: "BRL",
-                  }
-                )}
+              {entrada &&
+                saida &&
+                ((entrada - saida) / 100).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
             </p>
           }
         </div>
       </div>
-      <Button 
-      text="Adicionar Registro" 
-      onClick={handleModalAberto} />
+      <Button text="Adicionar Registro" onClick={handleModalAberto} />
     </div>
   );
 }
