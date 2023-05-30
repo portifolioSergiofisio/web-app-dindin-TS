@@ -30,8 +30,8 @@ export default function Login() {
       setTimeout(() => {
         navigate("/home");
       }, 1500);
-    } catch (err: any) {
-      toast.error(err.response.data.mensagem, {
+    } catch ({ response: { data: mensagem } }: any) {
+      toast.error(mensagem, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }

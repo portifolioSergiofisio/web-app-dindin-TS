@@ -1,23 +1,30 @@
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import Editar from "../../assets/editar.svg";
 import Excluir from "../../assets/excluir.svg";
 import setaFiltro from "../../assets/seta-filtro.svg";
 import axios from "../../services/api";
+import { categoriesFilter } from "../../types/types";
 import "./styles.scss";
 const token = localStorage.getItem("token");
 
 type Table = {
-  setTransacoes:Dispatch<SetStateAction<any>>,
-  setTransacaoAtual:Dispatch<SetStateAction<any>>,
-  setAtualizacao:Dispatch<SetStateAction<any>>
-  setModalAberto:Dispatch<SetStateAction<boolean>>
-  setTipoOperacao:Dispatch<SetStateAction<string>>
-  transacoes:any,
-  transacaoAtual:Array<object>|null
-  atualizacao:number
-  tipoOperacao:string
-  filtroAparecendo:boolean
-}
+  setTransacoes: Dispatch<SetStateAction<any>>;
+  setTransacaoAtual: Dispatch<SetStateAction<any>>;
+  setAtualizacao: Dispatch<SetStateAction<any>>;
+  setModalAberto: Dispatch<SetStateAction<boolean>>;
+  setTipoOperacao: Dispatch<SetStateAction<string>>;
+  transacoes: Array<categoriesFilter>;
+  transacaoAtual: object[] | null;
+  atualizacao: number;
+  tipoOperacao: string;
+  filtroAparecendo: boolean;
+};
 
 export default function Table({
   setTransacoes,
@@ -30,8 +37,9 @@ export default function Table({
   tipoOperacao,
   setTipoOperacao,
   filtroAparecendo,
-}:Table) {
-  
+}: Table) {
+  console.log(setTransacoes);
+
   const cabecalhoTabela = [
     "Dia da semana",
     "Descrição",
@@ -50,7 +58,7 @@ export default function Table({
   ];
   const [ordenaData, setOrdenaData] = useState(false);
 
-  function handleMiniModal(e:FormEvent, transacao:any) {
+  function handleMiniModal(e: FormEvent, transacao: categoriesFilter) {
     setTransacaoAtual(transacao.id);
     setTipoOperacao("deletar");
     e.stopPropagation();
@@ -64,34 +72,32 @@ export default function Table({
         },
       });
       setAtualizacao(atualizacao + 1);
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.message);
     }
   }
 
-  const handleModalAberto = (e:FormEvent, transacao:any) => {
+  const handleModalAberto = (e: FormEvent, transacao: any) => {
     setTransacaoAtual(transacao.id);
     setModalAberto(true);
     setTipoOperacao("editar");
     e.stopPropagation();
   };
 
-function handleOrdenaPorData() {
-  let transacoesOrdenadas = [...transacoes]; 
-  if (ordenaData) {
-    transacoesOrdenadas = transacoesOrdenadas.sort((a: any, b: any) => {
-      return new Date(a.data).getTime() - new Date(b.data).getTime();
-    });
-  } else {
-    transacoesOrdenadas = transacoesOrdenadas.sort((a: any, b: any) => {
-      return new Date(b.data).getTime() - new Date(a.data).getTime();
-    });
+  function handleOrdenaPorData() {
+    let transacoesOrdenadas = [...transacoes];
+    if (ordenaData) {
+      transacoesOrdenadas = transacoesOrdenadas.sort((a: any, b: any) => {
+        return new Date(a.data).getTime() - new Date(b.data).getTime();
+      });
+    } else {
+      transacoesOrdenadas = transacoesOrdenadas.sort((a: any, b: any) => {
+        return new Date(b.data).getTime() - new Date(a.data).getTime();
+      });
+    }
+    setTransacoes(transacoesOrdenadas);
+    setOrdenaData(!ordenaData);
   }
-  setTransacoes(transacoesOrdenadas);
-  setOrdenaData(!ordenaData);
-}
-
-
 
   useEffect(() => {}, [transacoes]);
 
@@ -114,8 +120,8 @@ function handleOrdenaPorData() {
         className="corpo-tabela"
         style={filtroAparecendo ? { height: "400px" } : { height: "70vh" }}
       >
-        {transacoes &&
-          transacoes.map((transacao:any, index:number) => {
+        {transacoes.length &&
+          transacoes.map((transacao: categoriesFilter, index: number) => {
             return (
               <div className="linha-tabela" key={index}>
                 <p>

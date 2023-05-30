@@ -8,7 +8,7 @@ import axios from "../../services/api";
 import "./styles.scss";
 
 export default function Home() {
-  const [transacoes, setTransacoes] = useState();
+  const [transacoes, setTransacoes] = useState({});
   const [transacaoAtual, setTransacaoAtual] = useState(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [atualizacao, setAtualizacao] = useState(0);
@@ -19,8 +19,8 @@ export default function Home() {
 
   const handleListarTransacoes = async () => {
     try {
-      const token = localStorage.getItem('token');
-      let parametros:any = '';
+      const token = localStorage.getItem("token");
+      let parametros: any = "";
       parametros = categoriasAtivas.map((cat, index) => {
         if (index < categoriasAtivas.length - 1) {
           return parametros.concat(`filtro[]=${cat}&`);
@@ -37,9 +37,9 @@ export default function Home() {
           },
         }
       );
-    data = data.sort((a: { data: string }, b: { data: string }) => {
-      return new Date(a.data).getTime() - new Date(b.data).getTime();
-    });
+      data = data.sort((a: { data: string }, b: { data: string }) => {
+        return new Date(a.data).getTime() - new Date(b.data).getTime();
+      });
 
       setTransacoes(data);
     } catch (error) {
@@ -50,7 +50,7 @@ export default function Home() {
   useEffect(() => {
     handleListarTransacoes();
   }, [atualizacao]);
-  
+
   return (
     <div className="container-home" onClick={() => setTransacaoAtual(null)}>
       <div className="tabela-resumo">
@@ -92,7 +92,6 @@ export default function Home() {
           setModalAberto={setModalAberto}
           setTipoOperacao={setTipoOperacao}
           categoriasAtivas={categoriasAtivas}
-          
         />
       </div>
       {modalAberto && (

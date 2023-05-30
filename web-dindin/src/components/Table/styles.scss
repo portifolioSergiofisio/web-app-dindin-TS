@@ -1,17 +1,22 @@
+@import "../../styles.scss";
+
 .tabela {
   max-height: 433px;
+
   .cabecalho-tabela {
-    @include display_flex(row, flex-start, center);
+    @include display_flex(row, space-between, center);
     font-weight: 700;
-    font-size: 14px;
+    font-size: 1.2em;
     line-height: 17px;
     background: #fafafa;
-    box-shadow: 0px 2px 11px rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 3px 10px #0000006d;
     border-radius: 10px;
     padding: 20px 27px;
     height: 60px;
   }
   .corpo-tabela {
+    box-shadow: 3px 3px 10px #0000006d;
+    border-radius: 10px;
     overflow-y: auto;
   }
   .data-seta {
@@ -31,6 +36,7 @@
   .editar-excluir {
     width: 150px;
     height: 100%;
+    font-size: 1.2em;
     text-align: center;
     &:first-child {
       text-align: left;
@@ -39,7 +45,6 @@
   .linha-tabela {
     @include display_flex(row, space-between, center);
     font-weight: 400;
-    font-size: 14px;
     line-height: 17px;
     padding: 20px;
     height: 70px;
@@ -72,6 +77,8 @@
   top: 28px;
   gap: 4px;
   padding: 14px 15px 8px 15px;
+  width: 250px;
+  height: 100px;
   z-index: 2;
   animation: popUp 0.4s forwards;
   p {
@@ -82,7 +89,8 @@
     gap: 7px;
     button {
       border-radius: 4px;
-      width: 37px;
+      width: 50px;
+      font-size: 1em;
       padding: 2px 10px;
       &:first-child {
         background-color: #3a9ff1;

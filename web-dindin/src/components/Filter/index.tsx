@@ -1,20 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../../services/api";
 import "./styles.scss";
 const token = localStorage.getItem("token");
 
+import { categoriesFilter, filter } from "../../types/types";
 import Categoria from "../Categoria";
-
-type Filter = {
-  setTransacoes:Dispatch<SetStateAction<any>>,
-  transacoes:any,
-  setAtualizacao:Dispatch<SetStateAction<number>>,
-  atualizacao:number,
-  categoriasAtivas:any,
-  setCategoriasAtivas:Dispatch<SetStateAction<any>>,
-  filtroAplicado:boolean,
-  setFiltroAplicado:Dispatch<SetStateAction<boolean>>,
-}
 
 export default function Filter({
   setTransacoes,
@@ -25,11 +15,10 @@ export default function Filter({
   setCategoriasAtivas,
   filtroAplicado,
   setFiltroAplicado,
-}:Filter) {
-  
-  const [categorias, setCategorias]:any = useState();
+}: filter) {
+  const [categorias, setCategorias]: any = useState();
 
-  async function handleListarCategorias():Promise<void> {
+  async function handleListarCategorias(): Promise<void> {
     try {
       const { data } = await axios.get("/usuario/categoria", {
         headers: {
@@ -37,14 +26,12 @@ export default function Filter({
         },
       });
       setCategorias(data);
-    } catch (error:any) {
-      console.log(error.response.data.mensagem);
+    } catch ({ response: { data: mensagem } }: any) {
+      console.log(mensagem);
     }
   }
 
-  function handleMiniCategorias(descricao:any) {
-    console.log(descricao);
-    
+  function handleMiniCategorias(descricao: string) {
     let newCategoriasAtivas = categoriasAtivas;
     if (categoriasAtivas.includes(descricao)) {
       const index = categoriasAtivas.indexOf(descricao);
@@ -64,10 +51,14 @@ export default function Filter({
   function handleAplicarFiltro() {
     setFiltroAplicado(true);
     setAtualizacao(atualizacao + 1);
-    let transacoesFiltradas = [...transacoes];
-    transacoesFiltradas = transacoesFiltradas.filter((filtro:any) => {
-      return categoriasAtivas.includes(filtro.categoria_nome);
-    });
+    let transacoesFiltradas = Object.values(transacoes);
+    transacoesFiltradas = transacoesFiltradas.filter(
+      (filtro: categoriesFilter) => {
+        console.log(filtro);
+
+        return categoriasAtivas.includes(filtro.categoria_nome);
+      }
+    );
     setTransacoes(transacoesFiltradas);
     if (categoriasAtivas.length === 0) setFiltroAplicado(false);
   }
@@ -82,7 +73,7 @@ export default function Filter({
         <strong>Categoria</strong>
         <div className="container-categorias">
           {categorias &&
-            categorias.map((categoria:any, index:number) => {
+            categorias.map((categoria: any, index: number) => {
               return (
                 <Categoria
                   descricao={categoria}
