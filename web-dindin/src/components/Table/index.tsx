@@ -20,7 +20,7 @@ type Table = {
   setModalAberto: Dispatch<SetStateAction<boolean>>;
   setTipoOperacao: Dispatch<SetStateAction<string>>;
   transacoes: Array<categoriesFilter>;
-  transacaoAtual: object[] | null;
+  transacaoAtual: undefined;
   atualizacao: number;
   tipoOperacao: string;
   filtroAparecendo: boolean;
