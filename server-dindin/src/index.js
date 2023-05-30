@@ -10,6 +10,6 @@ app.use(express.json());
 
 app.use(rota);
 
-app.listen(process.env.DB_PORT, () =>
-  console.log(`Ouvindo a porta ${process.env.DB_PORT}`)
+app.listen(process.env.PORT, () =>
+  console.log(`Ouvindo a porta ${process.env.PORT}`)
 );
