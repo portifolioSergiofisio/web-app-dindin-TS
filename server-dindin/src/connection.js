@@ -8,4 +8,6 @@ const knex = require("knex")({
   },
 });
 
+console.log(process.env.DB_HOST);
+
 module.exports = knex;
