@@ -1,12 +1,18 @@
+import { Request, Response } from "express";
+import { CustomRequest } from "../types/types";
+import { somaValoresFiltrados } from "../utils/verificaDados";
+
 const knex = require("../connection");
 const bcrypt = require("bcrypt");
-const { somaValoresFiltrados } = require("../utils/verificaDados");
 
-const detalharUsuarioLogado = (req, res) => {
+export const detalharUsuarioLogado = (req: CustomRequest, res: Response) => {
   return res.status(200).json(req.usuario);
 };
 
-const extratoTransacaoLogado = async (req, res) => {
+export const extratoTransacaoLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { filtro } = req.query;
   const { id } = req.usuario;
   const resposta = [];
@@ -20,9 +26,17 @@ const extratoTransacaoLogado = async (req, res) => {
       .groupBy("c.descricao", "t.tipo");
 
     if (filtro) {
-      for (let element of filtro) {
+      if (Array.isArray(filtro)) {
+        for (let element of filtro) {
+          for (let transacao of transacoes) {
+            if (transacao.descricao === element) {
+              resposta.push(transacao);
+            }
+          }
+        }
+      } else {
         for (let transacao of transacoes) {
-          if (transacao.descricao === element) {
+          if (transacao.descricao === filtro) {
             resposta.push(transacao);
           }
         }
@@ -36,7 +50,10 @@ const extratoTransacaoLogado = async (req, res) => {
   }
 };
 
-const detalharTransacaoLogado = async (req, res) => {
+export const detalharTransacaoLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id: transacao_id } = req.params;
   const { id: usuario_id } = req.usuario;
 
@@ -64,7 +81,10 @@ const detalharTransacaoLogado = async (req, res) => {
   }
 };
 
-const cadastrarTransacaoLogado = async (req, res) => {
+export const cadastrarTransacaoLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id: usuario_id } = req.usuario;
   const {
     descricao,
@@ -107,7 +127,10 @@ const cadastrarTransacaoLogado = async (req, res) => {
   }
 };
 
-const atualizarUsuarioLogado = async (req, res) => {
+export const atualizarUsuarioLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { nome, email, senha } = req.body;
   const { id } = req.usuario;
 
@@ -124,7 +147,7 @@ const atualizarUsuarioLogado = async (req, res) => {
   }
 };
 
-const listarCategorias = async (req, res) => {
+export const listarCategorias = async (_: Request, res: Response) => {
   try {
     const categorias = await knex("categorias");
 
@@ -134,7 +157,10 @@ const listarCategorias = async (req, res) => {
   }
 };
 
-const listarTransacoesLogado = async (req, res) => {
+export const listarTransacoesLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id: usuario_id } = req.usuario;
   const { filtro } = req.query;
   const resposta = [];
@@ -155,9 +181,17 @@ const listarTransacoesLogado = async (req, res) => {
       .where("t.usuario_id", usuario_id);
 
     if (filtro) {
-      for (let element of filtro) {
+      if (Array.isArray(filtro)) {
+        for (let element of filtro) {
+          for (let transacao of transacoes) {
+            if (transacao.categoria_nome === element) {
+              resposta.push(transacao);
+            }
+          }
+        }
+      } else {
         for (let transacao of transacoes) {
-          if (transacao.categoria_nome === element) {
+          if (transacao.categoria_nome === filtro) {
             resposta.push(transacao);
           }
         }
@@ -171,7 +205,10 @@ const listarTransacoesLogado = async (req, res) => {
   }
 };
 
-const atualizarTransacaoLogado = async (req, res) => {
+export const atualizarTransacaoLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id } = req.params;
   const {
     descricao,
@@ -192,7 +229,10 @@ const atualizarTransacaoLogado = async (req, res) => {
   }
 };
 
-const deletarTransacaoLogado = async (req, res) => {
+export const deletarTransacaoLogado = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id } = req.params;
 
   try {
@@ -204,9 +244,12 @@ const deletarTransacaoLogado = async (req, res) => {
   }
 };
 
-const listarCategoriasUsuario = async (req, res) => {
+export const listarCategoriasUsuario = async (
+  req: CustomRequest,
+  res: Response
+) => {
   const { id: usuario_id } = req.usuario;
-  const resposta = [];
+  const resposta: any = [];
 
   try {
     const categorias = await knex("transacoes as t")
@@ -220,7 +263,7 @@ const listarCategoriasUsuario = async (req, res) => {
         .status(404)
         .json({ mensagem: "Usuário sem transações cadastradas!" });
 
-    categorias.map((resp) => {
+    categorias.map((resp: any) => {
       resposta.push(resp.descricao);
     });
 
@@ -228,17 +271,4 @@ const listarCategoriasUsuario = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
-
-module.exports = {
-  detalharUsuarioLogado,
-  detalharTransacaoLogado,
-  cadastrarTransacaoLogado,
-  atualizarUsuarioLogado,
-  listarCategorias,
-  listarTransacoesLogado,
-  atualizarTransacaoLogado,
-  deletarTransacaoLogado,
-  extratoTransacaoLogado,
-  listarCategoriasUsuario,
 };

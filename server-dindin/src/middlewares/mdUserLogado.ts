@@ -1,10 +1,16 @@
-const {
+import { NextFunction, Response } from "express";
+import knex from "../connection";
+import { CustomRequest } from "../types/types";
+import {
   verificarDados,
   verificarEmailCadastrado,
-} = require("../utils/verificaDados.js");
-const knex = require("../connection");
+} from "../utils/verificaDados";
 
-const verificarTransacao = async (req, res, next) => {
+export const verificarTransacao = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const { descricao, valor, data, categoria_id, tipo } = req.body;
   const arrayDeTipos = ["entrada", "saida"];
 
@@ -45,7 +51,11 @@ const verificarTransacao = async (req, res, next) => {
   next();
 };
 
-const verificarAtualizacaoCadastro = async (req, res, next) => {
+export const verificarAtualizacaoCadastro = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const { nome, email, senha } = req.body;
   const { email: usuario_email } = req.usuario;
 
@@ -66,7 +76,11 @@ const verificarAtualizacaoCadastro = async (req, res, next) => {
   next();
 };
 
-const verificarUsuarioTransacao = async (req, res, next) => {
+export const verificarUsuarioTransacao = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const { id: transacao_id } = req.params;
   const { id: usuario_id } = req.usuario;
 
@@ -82,10 +96,4 @@ const verificarUsuarioTransacao = async (req, res, next) => {
   }
 
   next();
-};
-
-module.exports = {
-  verificarTransacao,
-  verificarAtualizacaoCadastro,
-  verificarUsuarioTransacao,
 };

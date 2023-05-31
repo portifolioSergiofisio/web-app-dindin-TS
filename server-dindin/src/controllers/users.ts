@@ -1,10 +1,12 @@
-const { verificarEmailCadastrado } = require("../utils/verificaDados");
-const knex = require("../connection");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const senhaJWT = process.env.SENHAJWT;
+import { Request, Response } from "express";
 
-const cadastrarUsuario = async (req, res) => {
+import bcrypt from "bcrypt";
+import jwt, { Secret } from "jsonwebtoken";
+import knex from "../connection";
+import { verificarEmailCadastrado } from "../utils/verificaDados";
+const senhaJWT: Secret = process.env.SENHAJWT!;
+
+export const cadastrarUsuario = async (req: Request, res: Response) => {
   const { nome, email, senha } = req.body;
 
   try {
@@ -20,7 +22,7 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-const efetuarLogin = async (req, res) => {
+export const efetuarLogin = async (req: Request, res: Response) => {
   const { email, senha } = req.body;
 
   try {
@@ -32,6 +34,10 @@ const efetuarLogin = async (req, res) => {
         .status(400)
         .json({ mensagem: "Usuário e/ou senha inválido(s)" });
 
+    if (!senhaJWT) {
+      throw new Error("Chave secreta não definida");
+    }
+
     const token = jwt.sign({ id: usuario[0].id }, senhaJWT, {
       expiresIn: "1d",
     });
@@ -42,9 +48,4 @@ const efetuarLogin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
-};
-
-module.exports = {
-  cadastrarUsuario,
-  efetuarLogin,
 };

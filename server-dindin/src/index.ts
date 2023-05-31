@@ -1,8 +1,8 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+import cors from "cors";
+import express from "express";
+import rota from "./routes";
 const app = express();
-const rota = require("./routes");
 
 app.use(cors());
 

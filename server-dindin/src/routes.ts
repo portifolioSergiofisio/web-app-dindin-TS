@@ -1,28 +1,28 @@
-const express = require("express");
-const rota = express();
-const {
+import express from "express";
+import {
+  atualizarTransacaoLogado,
+  atualizarUsuarioLogado,
+  cadastrarTransacaoLogado,
+  deletarTransacaoLogado,
+  detalharTransacaoLogado,
+  detalharUsuarioLogado,
+  extratoTransacaoLogado,
+  listarCategorias,
+  listarCategoriasUsuario,
+  listarTransacoesLogado,
+} from "./controllers/userLogado";
+import { cadastrarUsuario, efetuarLogin } from "./controllers/users";
+import {
+  verificarAtualizacaoCadastro,
+  verificarTransacao,
+  verificarUsuarioTransacao,
+} from "./middlewares/mdUserLogado";
+import {
   verificarDadosCadastro,
   verificarDadosLogin,
   verificarLogin,
-} = require("./middlewares/mdUsers");
-const { cadastrarUsuario, efetuarLogin } = require("./controllers/users");
-const {
-  detalharUsuarioLogado,
-  detalharTransacaoLogado,
-  cadastrarTransacaoLogado,
-  atualizarUsuarioLogado,
-  listarCategorias,
-  listarTransacoesLogado,
-  atualizarTransacaoLogado,
-  deletarTransacaoLogado,
-  extratoTransacaoLogado,
-  listarCategoriasUsuario,
-} = require("./controllers/userLogado");
-const {
-  verificarTransacao,
-  verificarAtualizacaoCadastro,
-  verificarUsuarioTransacao,
-} = require("./middlewares/mdUserLogado");
+} from "./middlewares/mdUsers";
+const rota = express();
 
 rota.post("/usuario", verificarDadosCadastro, cadastrarUsuario);
 rota.post("/login", verificarDadosLogin, efetuarLogin);
@@ -50,4 +50,4 @@ rota.delete(
 
 rota.get("/usuario/categoria", listarCategoriasUsuario);
 
-module.exports = rota;
+export default rota;
