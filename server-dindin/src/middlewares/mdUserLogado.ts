@@ -57,7 +57,7 @@ export const verificarAtualizacaoCadastro = async (
   next: NextFunction
 ) => {
   const { nome, email, senha } = req.body;
-  const { email: usuario_email } = req.usuario;
+  const { email: usuario_email } = req.usuario!;
 
   if (
     !verificarDados(res, {
@@ -82,7 +82,7 @@ export const verificarUsuarioTransacao = async (
   next: NextFunction
 ) => {
   const { id: transacao_id } = req.params;
-  const { id: usuario_id } = req.usuario;
+  const { id: usuario_id } = req.usuario!;
 
   try {
     const transacao = await knex("transacoes")

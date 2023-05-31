@@ -70,7 +70,6 @@ export const verificarLogin = async (
     if (usuario.length <= 0)
       return res.status(403).json({ mensagem: "Não autorizado" });
     const { senha: _, ...dadosUsuario } = usuario[0];
-    console.log(dadosUsuario);
 
     req.usuario = dadosUsuario;
     next();

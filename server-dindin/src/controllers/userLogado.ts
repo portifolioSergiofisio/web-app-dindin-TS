@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../types/types";
 import { somaValoresFiltrados } from "../utils/verificaDados";
 
-const knex = require("../connection");
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
+import knex from "../connection";
 
 export const detalharUsuarioLogado = (req: CustomRequest, res: Response) => {
   return res.status(200).json(req.usuario);
@@ -13,11 +13,15 @@ export const extratoTransacaoLogado = async (
   req: CustomRequest,
   res: Response
 ) => {
+  console.log("16");
+
   const { filtro } = req.query;
-  const { id } = req.usuario;
+  const { id } = req.usuario!;
   const resposta = [];
+  console.log("21");
 
   try {
+    console.log("24");
     const transacoes = await knex("transacoes as t")
       .leftJoin("categorias as c", "c.id", "t.categoria_id")
       .sum("t.valor as valor")
@@ -55,7 +59,7 @@ export const detalharTransacaoLogado = async (
   res: Response
 ) => {
   const { id: transacao_id } = req.params;
-  const { id: usuario_id } = req.usuario;
+  const { id } = req.usuario!;
 
   try {
     const transacao = await knex("transacoes as t")
@@ -69,7 +73,7 @@ export const detalharTransacaoLogado = async (
         "t.usuario_id",
         "c.descricao AS categoria_nome"
       )
-      .where("t.usuario_id", usuario_id)
+      .where("t.usuario_id", id)
       .andWhere("t.id", transacao_id);
 
     if (transacao.length <= 0)
@@ -85,7 +89,7 @@ export const cadastrarTransacaoLogado = async (
   req: CustomRequest,
   res: Response
 ) => {
-  const { id: usuario_id } = req.usuario;
+  const { id } = req.usuario!;
   const {
     descricao,
     valor,
@@ -93,7 +97,7 @@ export const cadastrarTransacaoLogado = async (
     categoria_id,
     tipo,
   } = req.body;
-  const { descricao: categoria_nome } = req.categoriaAtual;
+  const { descricao: categoria_nome } = req.categoriaAtual!;
 
   try {
     const transacao = await knex("transacoes")
@@ -102,7 +106,7 @@ export const cadastrarTransacaoLogado = async (
         descricao,
         valor,
         data_transacao,
-        usuario_id,
+        usuario_id: id,
         categoria_id,
       })
       .returning("*");
@@ -116,7 +120,7 @@ export const cadastrarTransacaoLogado = async (
       descricao,
       valor: parseFloat(valor),
       data: data_transacao,
-      usuario_id,
+      usuario_id: id,
       categoria_id,
       categoria_nome,
     };
@@ -132,7 +136,7 @@ export const atualizarUsuarioLogado = async (
   res: Response
 ) => {
   const { nome, email, senha } = req.body;
-  const { id } = req.usuario;
+  const { id } = req.usuario!;
 
   try {
     const senhaEncriptada = await bcrypt.hash(senha, 10);
@@ -161,7 +165,7 @@ export const listarTransacoesLogado = async (
   req: CustomRequest,
   res: Response
 ) => {
-  const { id: usuario_id } = req.usuario;
+  const { id } = req.usuario!;
   const { filtro } = req.query;
   const resposta = [];
 
@@ -178,7 +182,7 @@ export const listarTransacoesLogado = async (
         "t.categoria_id",
         "c.descricao AS categoria_nome"
       )
-      .where("t.usuario_id", usuario_id);
+      .where("t.usuario_id", id);
 
     if (filtro) {
       if (Array.isArray(filtro)) {
@@ -248,14 +252,14 @@ export const listarCategoriasUsuario = async (
   req: CustomRequest,
   res: Response
 ) => {
-  const { id: usuario_id } = req.usuario;
+  const { id } = req.usuario!;
   const resposta: any = [];
 
   try {
     const categorias = await knex("transacoes as t")
       .leftJoin("categorias as c", "c.id", "t.categoria_id")
       .select("c.descricao as descricao")
-      .where({ usuario_id })
+      .where({ id })
       .groupBy("c.descricao");
 
     if (categorias.length <= 0)

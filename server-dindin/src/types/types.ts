@@ -22,6 +22,13 @@ export interface TokenPayload {
 }
 
 export interface CustomRequest extends Request {
-  usuario?: any;
-  categoriaAtual?: any;
+  usuario?: {
+    id: number;
+    nome: string;
+    email: string;
+  };
+  categoriaAtual?: {
+    id: number;
+    descricao: string;
+  };
 }
